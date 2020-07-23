@@ -1,0 +1,27 @@
+/*Vue隐藏*/
+[v-cloak] {
+    display: none;
+}
+
+/*清除样式*/
+html {
+    height: 100%;
+    position: relative;
+    margin: 0 auto;
+    min-width: 768px;
+    font-size: 62.5%;
+}
+
+body {
+    height: calc(100% - 70px);
+    margin: 0 auto;
+    padding-top: 70px !important;
+    font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB,
+        Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+    font-size: 17px;
+    background: #f0f2f5;
+}
+
+.height-full-container {
+    height: 100%;
+}
