@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'winddata',                     #数据库名称
         'USER': 'root',                         # 链接数据库的用户名
         'PASSWORD': '4563368zhunG',             # 链接数据库的密码
-        'HOST': '127.0.0.1',                    # mysql服务器的域名和ip地址
+        'HOST': '192.168.60.16',                    # mysql服务器的域名和ip地址
         'PORT': '3306',                         # mysql的一个端口号,默认是3306
     }
 }
