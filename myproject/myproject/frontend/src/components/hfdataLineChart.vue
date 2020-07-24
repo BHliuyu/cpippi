@@ -23,42 +23,44 @@ export default {
             msg: '',
             chart: ''
             // chartData: [
-            //     { year: '1991', value: 3 },
-            //     { year: '1992', value: 4 },
-            //     { year: '1993', value: 3.5 },
-            //     { year: '1994', value: 5 },
-            //     { year: '1995', value: 4.9 },
-            //     { year: '1996', value: 6 },
-            //     { year: '1997', value: 7 },
-            //     { year: '1998', value: 9 },
-            //     { year: '1999', value: 13 }
+            //     { date: '1991', value: 3 },
+            //     { date: '1992', value: 4 },
+            //     { date: '1993', value: 3.5 },
+            //     { date: '1994', value: 5 },
+            //     { date: '1995', value: 4.9 },
+            //     { date: '1996', value: 6 },
+            //     { date: '1997', value: 7 },
+            //     { date: '1998', value: 9 },
+            //     { date: '1999', value: 13 }
             // ]
         }
     },
     // 方法集合
     methods: {
         initComponent() {
-            console.log('2' + this.chartHeight)
+            // console.log('2' + this.chartHeight)
             let offsetHeight = this.chartHeight ? this.chartHeight : 144
             let chart = new Chart({
                 container: this.$refs.lineChart,
                 autoFit: true,
-                height: offsetHeight
+                height: offsetHeight,
+                padding: [20, 10, 50, 25]
             })
-            console.log('offsetHeight' + offsetHeight)
+            // console.log('offsetHeight' + offsetHeight)
 
             const e = document.createEvent('Event')
             e.initEvent('resize', true, true)
             window.dispatchEvent(e)
 
             chart.data(this.chartData)
-            console.log(this.chartData)
+            // console.log(this.chartData)
             chart.scale({
-                year: {
+                date: {
                     range: [0, 1]
                 },
                 value: {
-                    min: 0,
+                    // min: 0,
+                    tickCount: 4,
                     nice: true
                 }
             })
@@ -68,11 +70,19 @@ export default {
                 shared: true
             })
 
-            chart
-                .line()
-                .position('year*value')
-                .label('value')
-            chart.point().position('year*value')
+            chart.axis('date', {
+                label: null
+            })
+
+            chart.line().position('date*value')
+            // .label('value')
+            // chart.point().position('date*value')
+
+            chart.option('slider', {
+                start: 0.5,
+                end: 1,
+                height: 20
+            })
             this.chart = chart
             this.chart.render()
         }

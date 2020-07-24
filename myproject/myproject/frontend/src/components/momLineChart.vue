@@ -103,7 +103,7 @@ export default {
     methods: {
         initComponent() {
             registerComponentController('slider', Slider)
-            console.log('mom' + this.chartHeight)
+            // console.log('mom' + this.chartHeight)
             let offsetHeight = this.chartHeight ? this.chartHeight : 144
             let chart = new Chart({
                 container: this.$refs.momLineChart,
@@ -111,14 +111,14 @@ export default {
                 height: offsetHeight,
                 padding: [30, 40, 60, 40]
             })
-            console.log('mom offsetHeight' + offsetHeight)
+            // console.log('mom offsetHeight' + offsetHeight)
 
             const e = document.createEvent('Event')
             e.initEvent('resize', true, true)
             window.dispatchEvent(e)
 
             chart.data(this.chartData)
-            console.log(this.chartData)
+            // console.log(this.chartData)
             chart.scale({
                 month: {
                     // range: [0, 1]
