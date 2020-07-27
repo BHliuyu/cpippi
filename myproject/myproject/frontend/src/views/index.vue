@@ -30,7 +30,7 @@
                                 height="540"
                                 style="width: 100%;margin-top: 20px;"
                                 row-key="id"
-                                default-expand-all
+                                :expand-row-keys="['2']"
                                 :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
                             >
                                 <el-table-column prop="name" label="品种" width="180"></el-table-column>
