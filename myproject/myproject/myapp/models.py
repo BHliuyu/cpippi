@@ -74,8 +74,20 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
+class Cpi(models.Model):
+    date = models.DateField(blank=True, primary_key=True)
+    cpi_true = models.FloatField(blank=True, null=True)
+    cpi_forecast = models.FloatField(blank=True, null=True)
+    cpi_market_forecast = models.FloatField(blank=True, null=True)
+    cpi_tail = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'cpi'
+
+
 class CpiHighFreqData(models.Model):
-    date = models.DateField(blank=True, primary_key = True)     #将日期作为主键
+    date = models.DateField(blank=True, primary_key=True)
     allcountry = models.FloatField(blank=True, null=True)
     thirtythreecitysale = models.FloatField(blank=True, null=True)
     twentytwocitysale = models.FloatField(blank=True, null=True)
@@ -87,17 +99,24 @@ class CpiHighFreqData(models.Model):
         db_table = 'cpi_high_freq_data'
 
 
-
-class CpiPpi(models.Model):
-    date = models.DateField(blank=True, primary_key = True)     #将日期作为主键
-    cpiyoy = models.FloatField(blank=True, null=True)
-    cpimom = models.FloatField(blank=True, null=True)
-    ppiyoy = models.FloatField(blank=True, null=True)
-    ppimom = models.FloatField(blank=True, null=True)
+class CpiMom(models.Model):
+    date = models.DateField(blank=True, primary_key=True)
+    cpi_true = models.FloatField(blank=True, null=True)
+    cpi_forecast = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'cpi_ppi'
+        db_table = 'cpi_mom'
+
+
+class Cpicompare(models.Model):
+    level = models.CharField(max_length=255, primary_key=True)
+    our_number = models.IntegerField()
+    other_number = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'cpicompare'
 
 
 class DjangoAdminLog(models.Model):
@@ -144,8 +163,20 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class Ppi(models.Model):
+    date = models.DateField(blank=True, primary_key=True)
+    ppi_true = models.FloatField(blank=True, null=True)
+    ppi_forecast = models.FloatField(blank=True, null=True)
+    ppi_market_forecast = models.FloatField(blank=True, null=True)
+    ppi_tail = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ppi'
+
+
 class PpiHighFreqData(models.Model):
-    date = models.DateField(blank=True, primary_key = True)     #将日期作为主键
+    date = models.DateField(blank=True, primary_key=True)
     crudeoil = models.FloatField(blank=True, null=True)
     hrb400 = models.FloatField(blank=True, null=True)
     lmecopper = models.FloatField(blank=True, null=True)
@@ -160,3 +191,23 @@ class PpiHighFreqData(models.Model):
     class Meta:
         managed = False
         db_table = 'ppi_high_freq_data'
+
+
+class PpiMom(models.Model):
+    date = models.DateField(blank=True, primary_key=True)
+    ppi_true = models.FloatField(blank=True, null=True)
+    ppi_forecast = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ppi_mom'
+
+
+class Ppicompare(models.Model):
+    level = models.CharField(max_length=255, primary_key=True)
+    our_number = models.IntegerField()
+    other_number = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'ppicompare'

@@ -9,6 +9,30 @@ import json
 def home(request):
     return render(request, "index.html")
 
+def get_cpi_yoy(request):
+    data = {}
+    ret = models.Cpi.objects.all().values()
+    data["data"] = list(ret)
+    return JsonResponse(data, safe=False)
+
+def get_ppi_yoy(request):
+    data = {}
+    ret = models.Ppi.objects.all().values()
+    data["data"] = list(ret)
+    return JsonResponse(data, safe=False)
+
+def get_cpi_mom(request):
+    data = {}
+    ret = models.CpiMom.objects.all().values()
+    data["data"] = list(ret)
+    return JsonResponse(data, safe=False)
+
+def get_ppi_mom(request):
+    data = {}
+    ret = models.PpiMom.objects.all().values()
+    data["data"] = list(ret)
+    return JsonResponse(data, safe=False)
+
 def get_cpidata_api(request):
 
     data = {}
@@ -23,9 +47,15 @@ def get_ppidata_api(request):
     data["data"] = list(ret)
     return JsonResponse(data, safe=False)
 
-def get_cpippi_api(request):
 
+def get_cpi_compare(request):
     data = {}
-    ret = models.CpiPpi.objects.all().values()
+    ret = models.Cpicompare.objects.all().values()
+    data["data"] = list(ret)
+    return JsonResponse(data, safe=False)
+
+def get_ppi_compare(request):
+    data = {}
+    ret = models.Ppicompare.objects.all().values()
     data["data"] = list(ret)
     return JsonResponse(data, safe=False)
