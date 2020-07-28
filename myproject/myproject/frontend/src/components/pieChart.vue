@@ -64,7 +64,7 @@ export default {
 
             let data = this.chartData
             let name = this.pieName
-            console.log(name)
+            // console.log(name)
             const piePlot = new Rose(this.$refs.pieChart, {
                 forceFit: true,
                 title: {

@@ -25,9 +25,16 @@
                             <div>
                                 <span>CPI权重数据</span>
                             </div>
-                            <el-table :data="cpiData" style="width: 100%;margin-top: 20px;" row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-                                <el-table-column prop="date" label="品种" width="180"></el-table-column>
-                                <el-table-column prop="address" label="权重" sortable></el-table-column>
+                            <el-table
+                                :data="cpiData"
+                                height="540"
+                                style="width: 100%;margin-top: 20px;"
+                                row-key="id"
+                                :expand-row-keys="['2']"
+                                :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+                            >
+                                <el-table-column prop="name" label="品种" width="180"></el-table-column>
+                                <el-table-column prop="value" label="权重" sortable></el-table-column>
                             </el-table>
                         </el-card>
                     </div>
@@ -70,7 +77,7 @@
                     <div class="grid-content grid-right-row">
                         <el-card class="box-card height-full-container">
                             <div>
-                                <span>高频数据</span>
+                                <span>高频数据：猪肉</span>
                             </div>
                             <div ref="hfchart" style="height:90%;overflow:hidden">
                                 <lineChart v-if="ishfReady" v-loading="hfloading" :chart-data="hfdata1" :chart-height="hfheight"></lineChart>
@@ -80,7 +87,7 @@
                     <div class="grid-content grid-right-row">
                         <el-card class="box-card height-full-container">
                             <div>
-                                <span>高频数据</span>
+                                <span>高频数据：蔬菜</span>
                             </div>
                             <div style="height:90%;overflow:hidden">
                                 <lineChart v-if="ishfReady" v-loading="hfloading" :chart-data="hfdata2" :chart-height="hfheight"></lineChart>
@@ -90,7 +97,7 @@
                     <div class="grid-content grid-right-row1">
                         <el-card class="box-card height-full-container">
                             <div>
-                                <span>高频数据</span>
+                                <span>高频数据：水果</span>
                             </div>
                             <div style="height:90%;overflow:hidden">
                                 <lineChart v-if="ishfReady" v-loading="hfloading" :chart-data="hfdata3" :chart-height="hfheight"></lineChart>
@@ -109,7 +116,7 @@ import lineChart from '@/components/hfdataLineChart.vue'
 import yoyLineChart from '@/components/yoyLineChart.vue'
 import momLineChart from '@/components/momLineChart.vue'
 import pieChart from '@/components/pieChart.vue'
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
     name: 'index',
@@ -127,16 +134,39 @@ export default {
     data() {
         return {
             cpiData: [
-                { id: 1, date: '生猪', address: '20%' },
-                { id: 2, date: '玉米', address: '20%' },
-                { id: 3, date: '粮食', address: '20%' },
                 {
-                    id: 4,
-                    date: '衣食住行',
-                    address: '40%',
+                    id: 1,
+                    name: '食品烟酒',
+                    value: '25.57%',
                     children: [
-                        { id: 41, date: '玉米', address: '20%' },
-                        { id: 42, date: '粮食', address: '20%' }
+                        { id: 11, name: '粮食', value: '1.79%' },
+                        { id: 12, name: '食用油', value: '1.50%' },
+                        { id: 13, name: '鲜菜', value: '2.54%' },
+                        { id: 14, name: '禽肉类', value: '1.21%' },
+                        { id: 15, name: '猪肉', value: '2.26%' },
+                        { id: 16, name: '牛肉', value: '1.13%' },
+                        { id: 17, name: '羊肉', value: '0.74%' },
+                        { id: 18, name: '水产品', value: '1.92%' },
+                        { id: 19, name: '蛋类', value: '0.50%' },
+                        { id: 110, name: '奶类', value: '1.50%' },
+                        { id: 111, name: '鲜果', value: '1.72%' },
+                        { id: 112, name: '烟草', value: '1.75%' },
+                        { id: 113, name: '酒类', value: '1.75%' },
+                        { id: 114, name: '在外餐饮', value: '5.26%' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: '非食品',
+                    value: '74.43%',
+                    children: [
+                        { id: 21, name: '衣着', value: '7.28%' },
+                        { id: 22, name: '居住', value: '23.32%' },
+                        { id: 23, name: '生活用品及服务', value: '6.20%' },
+                        { id: 24, name: '交通和通信', value: '13.20%' },
+                        { id: 25, name: '教育文化和娱乐', value: '10.73%' },
+                        { id: 26, name: '医疗保健', value: '7.90%' },
+                        { id: 27, name: '其他用品和服务', value: '5.80%' }
                     ]
                 }
             ],
@@ -152,6 +182,7 @@ export default {
     },
     methods: {
         getData() {
+            let HFDATA_URL = '/api/data/cpidata/'
             this.yoydata = [
                 { month: 'Jan', city: 'Tokyo', temperature: 7 },
                 { month: 'Jan', city: 'London', temperature: 3.9 },
@@ -178,17 +209,48 @@ export default {
                 { month: 'Dec', city: 'Tokyo', temperature: 9.6 },
                 { month: 'Dec', city: 'London', temperature: 4.8 }
             ]
-            this.hfdata1 = [
-                { year: '1991', value: 3 },
-                { year: '1992', value: 4 },
-                { year: '1993', value: 3.5 },
-                { year: '1994', value: 5 },
-                { year: '1995', value: 4.9 },
-                { year: '1996', value: 6 },
-                { year: '1997', value: 7 },
-                { year: '1998', value: 9 },
-                { year: '1999', value: 13 }
-            ]
+
+            axios
+                .get(HFDATA_URL, {})
+                .then(res => {
+                    let data = res.data.data
+                    this.hfdata1 = data.map(item => {
+                        return {
+                            date: item.date,
+                            value: item.thirtythreecitysale
+                        }
+                    })
+                    this.hfdata2 = data.map(item => {
+                        return {
+                            date: item.date,
+                            value: item.twentyeightvegetables
+                        }
+                    })
+                    this.hfdata3 = data.map(item => {
+                        return {
+                            date: item.date,
+                            value: item.sevenfruits
+                        }
+                    })
+                    this.hfloading = false
+                    this.ishfReady = true
+                    // console.log(this.hfdata1)
+                })
+                .catch(res => {
+                    console.log('高频数据获取有误，错误原因为：' + res)
+                })
+
+            // this.hfdata1 = [
+            //     { year: '1991', value: 3 },
+            //     { year: '1992', value: 4 },
+            //     { year: '1993', value: 3.5 },
+            //     { year: '1994', value: 5 },
+            //     { year: '1995', value: 4.9 },
+            //     { year: '1996', value: 6 },
+            //     { year: '1997', value: 7 },
+            //     { year: '1998', value: 9 },
+            //     { year: '1999', value: 13 }
+            // ]
             this.hfdata2 = [
                 { year: '1991', value: 3 },
                 { year: '1992', value: 4 },
@@ -212,8 +274,8 @@ export default {
                 { year: '1999', value: 13 }
             ]
             this.hfheight = this.$refs.hfchart.offsetHeight
-            console.log('this.getdata')
-            console.log('1' + this.hfheight)
+            // console.log('this.getdata')
+            // console.log('1' + this.hfheight)
             // console.log(this.hfdata3)
             // this.flag = true
             // if (this.hfdata1) {
@@ -235,8 +297,6 @@ export default {
             // })
             this.centerActiveTab = 'yoy'
             this.getData()
-            this.hfloading = false
-            this.ishfReady = true
         },
         handleClickTab(tab, event) {
             // console.log(tab.name)
@@ -275,7 +335,7 @@ export default {
     vertical-align: top;
 }
 .paddingTop {
-    padding-top: 20px;
+    padding-top: 5px;
 }
 .lastCPIValue {
     border-top: 1px solid #f6f6f6;
@@ -346,7 +406,7 @@ export default {
     /* margin: 0; */
 }
 .grid-left .grid-left-row2 {
-    flex: 2;
+    flex: 3;
     margin-bottom: 10px;
     /* margin: 0; */
 }
