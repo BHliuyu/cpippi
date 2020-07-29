@@ -11,9 +11,7 @@ import { Chart } from '@antv/g2'
 export default {
     name: 'lineChart',
     components: {},
-    // 生命周期 - 创建完成（可以访问当前this实例）
     created() {},
-    // 生命周期 - 载入后, Vue 实例挂载到实际的 DOM 操作完成，一般在该过程进行 Ajax 交互
     mounted() {
         this.initComponent()
     },
@@ -22,17 +20,6 @@ export default {
         return {
             msg: '',
             chart: ''
-            // chartData: [
-            //     { date: '1991', value: 3 },
-            //     { date: '1992', value: 4 },
-            //     { date: '1993', value: 3.5 },
-            //     { date: '1994', value: 5 },
-            //     { date: '1995', value: 4.9 },
-            //     { date: '1996', value: 6 },
-            //     { date: '1997', value: 7 },
-            //     { date: '1998', value: 9 },
-            //     { date: '1999', value: 13 }
-            // ]
         }
     },
     // 方法集合
@@ -44,7 +31,7 @@ export default {
                 container: this.$refs.lineChart,
                 autoFit: true,
                 height: offsetHeight,
-                padding: [20, 10, 50, 25]
+                padding: [20, 10, 50, 40]
             })
             // console.log('offsetHeight' + offsetHeight)
 
