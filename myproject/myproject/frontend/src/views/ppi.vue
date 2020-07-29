@@ -25,9 +25,16 @@
                             <div>
                                 <span>PPI权重数据</span>
                             </div>
-                            <el-table :data="PPIData" style="width: 100%;margin-top: 20px;" row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-                                <el-table-column prop="date" label="品种" width="180"></el-table-column>
-                                <el-table-column prop="address" label="权重" sortable></el-table-column>
+                            <el-table
+                                :data="ppiData"
+                                height="540"
+                                style="width: 100%;margin-top: 20px;"
+                                row-key="id"
+                                default-expand-all
+                                :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+                            >
+                                <el-table-column prop="name" label="品种" width="180"></el-table-column>
+                                <el-table-column prop="value" label="权重" sortable></el-table-column>
                             </el-table>
                         </el-card>
                     </div>
@@ -70,7 +77,7 @@
                     <div class="grid-content grid-right-row">
                         <el-card class="box-card height-full-container">
                             <div>
-                                <span>高频数据</span>
+                                <span>高频数据：OPEC一篮子原油</span>
                             </div>
                             <div ref="hfchart" style="height:90%;overflow:hidden">
                                 <lineChart v-if="ishfReady" v-loading="hfloading" :chart-data="hfdata1" :chart-height="hfheight"></lineChart>
@@ -80,7 +87,7 @@
                     <div class="grid-content grid-right-row">
                         <el-card class="box-card height-full-container">
                             <div>
-                                <span>高频数据</span>
+                                <span>高频数据：螺纹钢</span>
                             </div>
                             <div style="height:90%;overflow:hidden">
                                 <lineChart v-if="ishfReady" v-loading="hfloading" :chart-data="hfdata2" :chart-height="hfheight"></lineChart>
@@ -90,7 +97,7 @@
                     <div class="grid-content grid-right-row1">
                         <el-card class="box-card height-full-container">
                             <div>
-                                <span>高频数据</span>
+                                <span>高频数据：LME铜</span>
                             </div>
                             <div style="height:90%;overflow:hidden">
                                 <lineChart v-if="ishfReady" v-loading="hfloading" :chart-data="hfdata3" :chart-height="hfheight"></lineChart>
@@ -109,7 +116,7 @@ import lineChart from '@/components/hfdataLineChart.vue'
 import yoyLineChart from '@/components/yoyLineChart.vue'
 import momLineChart from '@/components/momLineChart.vue'
 import pieChart from '@/components/pieChart.vue'
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
     name: 'index',
@@ -126,17 +133,26 @@ export default {
     },
     data() {
         return {
-            PPIData: [
-                { id: 1, date: '生猪', address: '20%' },
-                { id: 2, date: '玉米', address: '20%' },
-                { id: 3, date: '粮食', address: '20%' },
+            ppiData: [
                 {
-                    id: 4,
-                    date: '衣食住行',
-                    address: '40%',
+                    id: 1,
+                    name: '生产资料',
+                    value: '76.76%',
                     children: [
-                        { id: 41, date: '玉米', address: '20%' },
-                        { id: 42, date: '粮食', address: '20%' }
+                        { id: 11, name: '采掘工业', value: '0.49%' },
+                        { id: 12, name: '原材料工业', value: '21.84%' },
+                        { id: 13, name: '加工工业', value: '50.02%' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: '生活资料',
+                    value: '23.24%',
+                    children: [
+                        { id: 21, name: '食品类', value: '8.21%' },
+                        { id: 22, name: '衣着类', value: '3.44%' },
+                        { id: 23, name: '一般日用品类', value: '5.60%' },
+                        { id: 24, name: '耐用消费品类', value: '6.02%' }
                     ]
                 }
             ],
@@ -152,43 +168,60 @@ export default {
     },
     methods: {
         getData() {
-            this.yoydata = [
-                { month: 'Jan', city: 'Tokyo', temperature: 7 },
-                { month: 'Jan', city: 'London', temperature: 3.9 },
-                { month: 'Feb', city: 'Tokyo', temperature: 6.9 },
-                { month: 'Feb', city: 'London', temperature: 4.2 },
-                { month: 'Mar', city: 'Tokyo', temperature: 9.5 },
-                { month: 'Mar', city: 'London', temperature: 5.7 },
-                { month: 'Apr', city: 'Tokyo', temperature: 14.5 },
-                { month: 'Apr', city: 'London', temperature: 8.5 },
-                { month: 'May', city: 'Tokyo', temperature: 18.4 },
-                { month: 'May', city: 'London', temperature: 11.9 },
-                { month: 'Jun', city: 'Tokyo', temperature: 21.5 },
-                { month: 'Jun', city: 'London', temperature: 15.2 },
-                { month: 'Jul', city: 'Tokyo', temperature: 25.2 },
-                { month: 'Jul', city: 'London', temperature: 17 },
-                { month: 'Aug', city: 'Tokyo', temperature: 26.5 },
-                { month: 'Aug', city: 'London', temperature: 16.6 },
-                { month: 'Sep', city: 'Tokyo', temperature: 23.3 },
-                { month: 'Sep', city: 'London', temperature: 14.2 },
-                { month: 'Oct', city: 'Tokyo', temperature: 18.3 },
-                { month: 'Oct', city: 'London', temperature: 10.3 },
-                { month: 'Nov', city: 'Tokyo', temperature: 13.9 },
-                { month: 'Nov', city: 'London', temperature: 6.6 },
-                { month: 'Dec', city: 'Tokyo', temperature: 9.6 },
-                { month: 'Dec', city: 'London', temperature: 4.8 }
-            ]
-            this.hfdata1 = [
-                { year: '1991', value: 3 },
-                { year: '1992', value: 4 },
-                { year: '1993', value: 3.5 },
-                { year: '1994', value: 5 },
-                { year: '1995', value: 4.9 },
-                { year: '1996', value: 6 },
-                { year: '1997', value: 7 },
-                { year: '1998', value: 9 },
-                { year: '1999', value: 13 }
-            ]
+            let HFDATA_URL = '/api/data/ppidata/'
+
+            axios
+                .get(HFDATA_URL, {})
+                .then(res => {
+                    let data = res.data.data
+                    let arr1 = []
+                    let arr2 = []
+                    let arr3 = []
+                    data.map(item => {
+                        if (item.crudeoil !== null) {
+                            let obj1 = {
+                                date: item.date,
+                                value: item.crudeoil
+                            }
+                            arr1.push(obj1)
+                        }
+                        if (item.hrb400 !== null) {
+                            let obj2 = {
+                                date: item.date,
+                                value: item.hrb400
+                            }
+                            arr2.push(obj2)
+                        }
+                        if (item.lmecopper !== null) {
+                            let obj = {
+                                date: item.date,
+                                value: item.lmecopper
+                            }
+                            arr3.push(obj)
+                        }
+                    })
+                    this.hfdata1 = arr1
+                    this.hfdata2 = arr2
+                    this.hfdata3 = arr3
+                    this.hfloading = false
+                    this.ishfReady = true
+                    // console.log(this.hfdata1)
+                })
+                .catch(res => {
+                    console.log('高频数据获取有误，错误原因为：' + res)
+                })
+
+            // this.hfdata1 = [
+            //     { year: '1991', value: 3 },
+            //     { year: '1992', value: 4 },
+            //     { year: '1993', value: 3.5 },
+            //     { year: '1994', value: 5 },
+            //     { year: '1995', value: 4.9 },
+            //     { year: '1996', value: 6 },
+            //     { year: '1997', value: 7 },
+            //     { year: '1998', value: 9 },
+            //     { year: '1999', value: 13 }
+            // ]
             this.hfdata2 = [
                 { year: '1991', value: 3 },
                 { year: '1992', value: 4 },
@@ -212,8 +245,8 @@ export default {
                 { year: '1999', value: 13 }
             ]
             this.hfheight = this.$refs.hfchart.offsetHeight
-            console.log('this.getdata')
-            console.log('1' + this.hfheight)
+            // console.log('this.getdata')
+            // console.log('1' + this.hfheight)
             // console.log(this.hfdata3)
             // this.flag = true
             // if (this.hfdata1) {
@@ -235,8 +268,6 @@ export default {
             // })
             this.centerActiveTab = 'yoy'
             this.getData()
-            this.hfloading = false
-            this.ishfReady = true
         },
         handleClickTab(tab, event) {
             // console.log(tab.name)
@@ -275,7 +306,7 @@ export default {
     vertical-align: top;
 }
 .paddingTop {
-    padding-top: 20px;
+    padding-top: 5px;
 }
 .lastPPIValue {
     border-top: 1px solid #f6f6f6;
@@ -346,7 +377,7 @@ export default {
     /* margin: 0; */
 }
 .grid-left .grid-left-row2 {
-    flex: 2;
+    flex: 3;
     margin-bottom: 10px;
     /* margin: 0; */
 }

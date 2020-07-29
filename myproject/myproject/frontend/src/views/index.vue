@@ -183,55 +183,41 @@ export default {
     methods: {
         getData() {
             let HFDATA_URL = '/api/data/cpidata/'
-            this.yoydata = [
-                { month: 'Jan', city: 'Tokyo', temperature: 7 },
-                { month: 'Jan', city: 'London', temperature: 3.9 },
-                { month: 'Feb', city: 'Tokyo', temperature: 6.9 },
-                { month: 'Feb', city: 'London', temperature: 4.2 },
-                { month: 'Mar', city: 'Tokyo', temperature: 9.5 },
-                { month: 'Mar', city: 'London', temperature: 5.7 },
-                { month: 'Apr', city: 'Tokyo', temperature: 14.5 },
-                { month: 'Apr', city: 'London', temperature: 8.5 },
-                { month: 'May', city: 'Tokyo', temperature: 18.4 },
-                { month: 'May', city: 'London', temperature: 11.9 },
-                { month: 'Jun', city: 'Tokyo', temperature: 21.5 },
-                { month: 'Jun', city: 'London', temperature: 15.2 },
-                { month: 'Jul', city: 'Tokyo', temperature: 25.2 },
-                { month: 'Jul', city: 'London', temperature: 17 },
-                { month: 'Aug', city: 'Tokyo', temperature: 26.5 },
-                { month: 'Aug', city: 'London', temperature: 16.6 },
-                { month: 'Sep', city: 'Tokyo', temperature: 23.3 },
-                { month: 'Sep', city: 'London', temperature: 14.2 },
-                { month: 'Oct', city: 'Tokyo', temperature: 18.3 },
-                { month: 'Oct', city: 'London', temperature: 10.3 },
-                { month: 'Nov', city: 'Tokyo', temperature: 13.9 },
-                { month: 'Nov', city: 'London', temperature: 6.6 },
-                { month: 'Dec', city: 'Tokyo', temperature: 9.6 },
-                { month: 'Dec', city: 'London', temperature: 4.8 }
-            ]
 
             axios
                 .get(HFDATA_URL, {})
                 .then(res => {
                     let data = res.data.data
-                    this.hfdata1 = data.map(item => {
-                        return {
-                            date: item.date,
-                            value: item.thirtythreecitysale
+                    // console.log(data)
+                    let arr1 = []
+                    let arr2 = []
+                    let arr3 = []
+                    data.map(item => {
+                        if (item.thirtythreecitysale !== null) {
+                            let obj1 = {
+                                date: item.date,
+                                value: item.thirtythreecitysale
+                            }
+                            arr1.push(obj1)
+                        }
+                        if (item.twentyeightvegetables !== null) {
+                            let obj2 = {
+                                date: item.date,
+                                value: item.twentyeightvegetables
+                            }
+                            arr2.push(obj2)
+                        }
+                        if (item.sevenfruits !== null) {
+                            let obj = {
+                                date: item.date,
+                                value: item.sevenfruits
+                            }
+                            arr3.push(obj)
                         }
                     })
-                    this.hfdata2 = data.map(item => {
-                        return {
-                            date: item.date,
-                            value: item.twentyeightvegetables
-                        }
-                    })
-                    this.hfdata3 = data.map(item => {
-                        return {
-                            date: item.date,
-                            value: item.sevenfruits
-                        }
-                    })
+                    this.hfdata1 = arr1
+                    this.hfdata2 = arr2
+                    this.hfdata3 = arr3
                     this.hfloading = false
                     this.ishfReady = true
                     // console.log(this.hfdata1)
