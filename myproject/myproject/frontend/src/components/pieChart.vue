@@ -1,12 +1,16 @@
 <template>
-    <div ref="pieChart" class="pieChart">
-        <!-- <div id="hfdatapieChart"></div> -->
+    <div class="allpieChart">
+        <div class="pieTitle">{{pieName}}</div>
+        <div class="pieDiscribe">2016年至今（单位：%）</div>
+        <div ref="pieChart" class="pieChart">
+            <!-- <div id="hfdatapieChart"></div> -->
+        </div>
     </div>
 </template>
 
 <script>
-import { Donut } from '@antv/g2plot'
-// import { DataSet } from '@antv/data-set'
+import { Chart } from '@antv/g2'
+import { DataView } from '@antv/data-set'
 
 export default {
     name: 'pieChart',
@@ -63,37 +67,145 @@ export default {
             window.dispatchEvent(e)
 
             let data = this.chartData
-            let name = this.pieName
+            // let name = this.pieName
             // console.log(name)
-            const piePlot = new Donut(this.$refs.pieChart, {
-                forceFit: true,
-                title: {
-                    visible: true,
-                    text: name
-                },
-                description: {
-                    visible: true,
-                    text: '2016年至今 （单位：次）'
-                },
-                radius: 1,
-                padding: 'auto',
-                data,
-                angleField: 'value',
-                colorField: 'type'
-                // statistic: {
-                //     visible: false
-                // }
 
-                // radiusField: 'value',
-                // categoryField: 'type',
-                // label: {
-                //     visible: true,
-                //     type: 'outer',
-                //     content: text => text.value
-                // }
+            // 通过DataSet计算百分比
+            const dv = new DataView()
+            dv.source(data).transform({
+                type: 'percent',
+                field: 'value',
+                dimension: 'type',
+                as: 'percent'
+            })
+            const chart = new Chart({
+                container: this.$refs.pieChart,
+                autoFit: true,
+                // height: 500,
+                padding: 0
+            })
+            // const piePlot = new Donut(this.$refs.pieChart, {
+            //     forceFit: true,
+            //     title: {
+            //         visible: true,
+            //         text: name
+            //     },
+            //     description: {
+            //         visible: true,
+            //         text: '2016年至今 （单位：次）'
+            //     },
+            //     radius: 1,
+            //     padding: 'auto',
+            //     data,
+            //     angleField: 'value',
+            //     colorField: 'type'
+            //     statistic: {
+            //         visible: false
+            //     }
+
+            //     radiusField: 'value',
+            //     categoryField: 'type',
+            //     label: {
+            //         visible: true,
+            //         type: 'outer',
+            //         content: text => text.value
+            //     }
+            // })
+
+            chart.data(dv.rows)
+            chart.scale({
+                percent: {
+                    formatter: val => {
+                        val = (val * 100).toFixed(2) + '%'
+                        return val
+                    }
+                }
+            })
+            chart.coordinate('theta', {
+                radius: 0.5
+            })
+            chart.tooltip({
+                showTitle: false,
+                showMarkers: false
+            })
+            chart.legend(false)
+            chart
+                .interval()
+                .adjust('stack')
+                .position('percent')
+                .color('type')
+                .label('type', {
+                    offset: -10
+                })
+                .tooltip('type*percent', (item, percent) => {
+                    percent = (percent * 100).toFixed(2) + '%'
+                    return {
+                        name: item,
+                        value: percent
+                    }
+                })
+                .style({
+                    lineWidth: 1,
+                    stroke: '#fff'
+                })
+
+            const outterView = chart.createView()
+            const dv1 = new DataView()
+            dv1.source(data).transform({
+                type: 'percent',
+                field: 'value',
+                dimension: 'name',
+                as: 'percent'
             })
 
-            piePlot.render()
+            outterView.data(dv1.rows)
+            outterView.scale({
+                percent: {
+                    formatter: val => {
+                        val = (val * 100).toFixed(2) + '%'
+                        return val
+                    }
+                }
+            })
+            outterView.coordinate('theta', {
+                innerRadius: 0.5 / 0.75,
+                radius: 0.75
+            })
+            outterView
+                .interval()
+                .adjust('stack')
+                .position('percent')
+                .color('name', [
+                    '#BAE7FF',
+                    '#7FC9FE',
+                    '#71E3E3',
+                    '#ABF5F5',
+                    '#8EE0A1',
+                    '#BAF5C4'
+                ])
+                .label('name', function(val) {
+                    if (val < 0.51) {
+                        return {
+                            offset: 10
+                        }
+                    } else {
+                        return null
+                    }
+                })
+                .tooltip('name*percent', (item, percent) => {
+                    percent = (percent * 100).toFixed(2) + '%'
+                    return {
+                        name: item,
+                        value: percent
+                    }
+                })
+                .style({
+                    lineWidth: 1,
+                    stroke: '#fff'
+                })
+
+            chart.interaction('element-highlight')
+            chart.render()
         }
     },
     // 计算属性
@@ -109,11 +221,26 @@ export default {
 </script>
 
 <style scoped>
-.pieChart {
+.allpieChart {
     height: 100%;
     width: 100%;
     min-height: 144px;
+}
+.pieChart {
+    height: calc(100% - 40px);
+    width: 100%;
+    min-height: 144px;
     /* overflow: hidden; */
+}
+.pieTitle {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.pieDiscribe {
+    text-align: left;
+    margin-left: 20px;
+    font-size: 12px;
 }
 /* .pieChart .hfdatapieChart {
     height: 100%;

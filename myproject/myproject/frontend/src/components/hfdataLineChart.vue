@@ -73,6 +73,7 @@ export default {
 
             const maxObj = this.findMax(data)
             const minObj = this.findMin(data)
+            // console.log(minObj)
             chart.annotation().dataMarker({
                 position: [maxObj.date, maxObj.value],
                 // position() {
@@ -141,7 +142,7 @@ export default {
         },
         // 查找最小值
         findMin(data) {
-            let minValue = 100
+            let minValue = 100000
             let minObj = null
             data.forEach(obj => {
                 if (obj.value < minValue) {

@@ -223,25 +223,35 @@ export default {
                 .get(PIE_URL, {})
                 .then(res => {
                     let data = res.data.data
-
-                    this.cciForecast_data = data.map(item => {
-                        return {
-                            type: item.level,
-                            value: item.our_number
+                    let arr1 = []
+                    let arr2 = []
+                    data.map(item => {
+                        if (item.other_number !== 0) {
+                            let obj1 = {
+                                type: item.level1,
+                                name: item.level2,
+                                value: item.other_number
+                            }
+                            arr1.push(obj1)
+                        }
+                        if (item.our_number !== 0) {
+                            let obj2 = {
+                                type: item.level1,
+                                name: item.level2,
+                                value: item.our_number
+                            }
+                            arr2.push(obj2)
                         }
                     })
-                    this.otherForecast_data = data.map(item => {
-                        return {
-                            type: item.level,
-                            value: item.other_number
-                        }
-                    })
+                    this.otherForecast_data = arr1
+                    this.cciForecast_data = arr2
                     this.isPieReady = true
-                    // console.log(this.cpiyoy_data)
+                    // console.log(this.otherForecast_data)
                 })
                 .catch(res => {
                     console.log('cpi同比数据获取有误，错误原因为：' + res)
                 })
+            console.log(this.cciForecast_data)
 
             axios
                 .get(HFDATA_URL, {})
