@@ -110,7 +110,8 @@ class CpiMom(models.Model):
 
 
 class Cpicompare(models.Model):
-    level = models.CharField(max_length=255, primary_key=True)
+    level1 = models.CharField(max_length=255)
+    level2 = models.CharField(max_length=255, primary_key=True)
     our_number = models.IntegerField()
     other_number = models.IntegerField()
 
@@ -204,7 +205,8 @@ class PpiMom(models.Model):
 
 
 class Ppicompare(models.Model):
-    level = models.CharField(max_length=255, primary_key=True)
+    level1 = models.CharField(max_length=255)
+    level2 = models.CharField(max_length=255, blank=True, primary_key=True)
     our_number = models.IntegerField()
     other_number = models.IntegerField()
 
