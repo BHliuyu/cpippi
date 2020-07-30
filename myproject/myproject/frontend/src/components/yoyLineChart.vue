@@ -18,85 +18,85 @@ export default {
     mounted() {
         this.initComponent()
     },
-    // props: ['chartData', 'chartHeight'],
+    props: ['chartData'],
     data() {
         return {
             msg: '',
-            chart: '',
-            chartData: [
-                {
-                    month: 'Jan',
-                    CPIforecast: 6,
-                    CPIvalue: 7,
-                    pv: 17
-                },
-                {
-                    month: 'Feb',
-                    CPIforecast: 7,
-                    CPIvalue: 6.9,
-                    pv: 17
-                },
-                {
-                    month: 'Mar',
-                    CPIforecast: 9,
-                    CPIvalue: 9.5,
-                    pv: 17
-                },
-                {
-                    month: 'Apr',
-                    CPIforecast: 5,
-                    CPIvalue: 4.5,
-                    pv: 19
-                },
-                {
-                    month: 'May',
-                    CPIforecast: 8,
-                    CPIvalue: 8.4,
-                    pv: 1
-                },
-                {
-                    month: 'Jun',
-                    CPIforecast: 1,
-                    CPIvalue: 1.5,
-                    pv: 17
-                },
-                {
-                    month: 'Jul',
-                    CPIforecast: 5,
-                    CPIvalue: 5.2,
-                    pv: 3
-                },
-                {
-                    month: 'Aug',
-                    CPIforecast: 7,
-                    CPIvalue: 6.5,
-                    pv: 10
-                },
-                {
-                    month: 'Sep',
-                    CPIforecast: 3,
-                    CPIvalue: 3.3,
-                    pv: 17
-                },
-                {
-                    month: 'Oct',
-                    CPIforecast: 8,
-                    CPIvalue: 8.3,
-                    pv: 14
-                },
-                {
-                    month: 'Nov',
-                    CPIforecast: 4,
-                    CPIvalue: 3.9,
-                    pv: 12
-                },
-                {
-                    month: 'Dec',
-                    CPIforecast: 9,
-                    CPIvalue: 9.6,
-                    pv: 17
-                }
-            ]
+            chart: ''
+            // chartData: [
+            //     {
+            //         date: 'Jan',
+            //         forecast: 6,
+            //         real_value: 7,
+            //         pv: 17
+            //     },
+            //     {
+            //         date: 'Feb',
+            //         forecast: 7,
+            //         real_value: 6.9,
+            //         pv: 17
+            //     },
+            //     {
+            //         date: 'Mar',
+            //         forecast: 9,
+            //         real_value: 9.5,
+            //         pv: 17
+            //     },
+            //     {
+            //         date: 'Apr',
+            //         forecast: 5,
+            //         real_value: 4.5,
+            //         pv: 19
+            //     },
+            //     {
+            //         date: 'May',
+            //         forecast: 8,
+            //         real_value: 8.4,
+            //         pv: 1
+            //     },
+            //     {
+            //         date: 'Jun',
+            //         forecast: 1,
+            //         real_value: 1.5,
+            //         pv: 17
+            //     },
+            //     {
+            //         date: 'Jul',
+            //         forecast: 5,
+            //         real_value: 5.2,
+            //         pv: 3
+            //     },
+            //     {
+            //         date: 'Aug',
+            //         forecast: 7,
+            //         real_value: 6.5,
+            //         pv: 10
+            //     },
+            //     {
+            //         date: 'Sep',
+            //         forecast: 3,
+            //         real_value: 3.3,
+            //         pv: 17
+            //     },
+            //     {
+            //         date: 'Oct',
+            //         forecast: 8,
+            //         real_value: 8.3,
+            //         pv: 14
+            //     },
+            //     {
+            //         date: 'Nov',
+            //         forecast: 4,
+            //         real_value: 3.9,
+            //         pv: 12
+            //     },
+            //     {
+            //         date: 'Dec',
+            //         forecast: 9,
+            //         real_value: 9.6,
+            //         pv: 17
+            //     }
+            // ]
         }
     },
     // 方法集合
@@ -117,25 +117,32 @@ export default {
             e.initEvent('resize', true, true)
             window.dispatchEvent(e)
 
+            // let reverseData = this.chartData.reverse()
+            // chart.data(reverseData)
             chart.data(this.chartData)
+            // let count = this.chartData.length
             // console.log(this.chartData)
             chart.scale({
-                month: {
-                    // range: [0, 1]
+                // tickCount: 5,
+                date: {
+                    range: [0.02, 0.98]
                 },
-                CPIvalue: {
+                real_value: {
+                    alias: '真实值',
                     nice: true,
-                    sync: true
+                    sync: 'value'
                 },
-                CPIforecast: {
+                forecast: {
+                    alias: '预测值',
                     nice: true,
-                    sync: true
+                    sync: 'value'
                 },
                 pv: {
                     alias: '翘尾因素',
-                    min: 0,
+                    // min: 0,
                     // sync: true, // 将 pv 字段数值同 time 字段数值进行同步
-                    nice: true
+                    nice: true,
+                    sync: 'value'
                 }
             })
 
@@ -144,17 +151,25 @@ export default {
                 shared: true
             })
 
-            chart.axis('CPIvalue', {
+            // chart.axis('real_value', {
+            //     grid: null,
+            //     label: {
+            //         formatter: val => {
+            //             return val + ' %'
+            //         }
+            //     }
+            // })
+            chart.axis('real_value', false)
+            chart.axis('forecast', false)
+            chart.axis('pv', {
                 label: {
                     formatter: val => {
                         return val + ' %'
                     }
-                }
+                },
+                title: null
             })
-            chart.axis('CPIforecast', false)
-            chart.axis('pv', {
-                title: {}
-            })
+            // chart.axis('pv', false)
 
             chart.legend({
                 position: 'top', // 设置图例的显示位置
@@ -163,7 +178,7 @@ export default {
                 custom: true,
                 items: [
                     {
-                        value: 'CPIvalue',
+                        value: 'real_value',
                         name: 'CPI真实值',
                         marker: {
                             symbol: 'hyphen',
@@ -171,7 +186,7 @@ export default {
                         }
                     },
                     {
-                        value: 'CPIforecast',
+                        value: 'forecast',
                         name: 'CPI预测值',
                         marker: {
                             symbol: 'hyphen',
@@ -191,31 +206,31 @@ export default {
 
             chart
                 .interval()
-                .position('month*pv')
+                .position('date*pv')
                 .color('#E4E4E4')
-
             chart
                 .line()
-                .position('month*CPIvalue')
+                .position('date*real_value')
                 .color('#62DAAB')
                 .shape('smooth')
             chart
                 .point()
-                .position('month*CPIvalue')
+                .position('date*real_value')
                 .color('#62DAAB')
-                .shape('circle')
+                .shape('triangle')
 
             chart
                 .line()
-                .position('month*CPIforecast')
+                .position('date*forecast')
                 .color('#fdae6b')
                 .shape('smooth')
             chart
                 .point()
-                .position('month*CPIforecast')
+                .position('date*forecast')
                 .color('#fdae6b')
                 .shape('circle')
 
+            // chart.coord().reflect('x')
             chart.option('slider', {
                 end: 1,
                 height: 26

@@ -4,7 +4,7 @@
             <img src="@/assets/logo.png" alt="logo" />
         </a>
         <a class="menu-text" herf="{path:/}">
-            <span>首页</span>
+            <span>物价预测展示系统</span>
         </a>
         <div class="menu-container">
             <el-menu router :default-active="$route.path" class="el-menu-demo" mode="horizontal">

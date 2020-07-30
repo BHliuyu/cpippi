@@ -48,11 +48,11 @@
                             <el-tabs v-model="centerActiveTab" @tab-click="handleClickTab" style="height:100%">
                                 <el-tab-pane label="CPI同比" name="yoy">
                                     <!-- <yoyLineChart :chart-data="yoydata" :chart-height="hfheight"></yoyLineChart> -->
-                                    <yoyLineChart v-if="'yoy' === centerActiveTab"></yoyLineChart>
+                                    <yoyLineChart v-if="'yoy' === centerActiveTab && ifCpiyoyReady" :chart-data="cpiyoy_data"></yoyLineChart>
                                 </el-tab-pane>
                                 <el-tab-pane label="CPI环比" name="mom">
                                     <!-- <yoyLineChart :chart-data="yoydata" :chart-height="hfheight"></yoyLineChart> -->
-                                    <momLineChart v-if="'mom' === centerActiveTab"></momLineChart>
+                                    <momLineChart v-if="'mom' === centerActiveTab && ifCpimomReady" :chart-data="cpimom_data"></momLineChart>
                                 </el-tab-pane>
                             </el-tabs>
                         </el-card>
@@ -64,10 +64,10 @@
                             </div>-->
                             <div class="bottom">
                                 <div class="bottomBlock">
-                                    <pieChart pie-name="指数公司预测误差"></pieChart>
+                                    <pieChart v-if="isPieReady" :chart-data="cciForecast_data" pie-name="指数公司预测误差"></pieChart>
                                 </div>
                                 <div class="bottomBlock">
-                                    <pieChart pie-name="市场机构预测误差"></pieChart>
+                                    <pieChart v-if="isPieReady" :chart-data="otherForecast_data" pie-name="市场机构预测误差"></pieChart>
                                 </div>
                             </div>
                         </el-card>
@@ -175,6 +175,13 @@ export default {
             ishfReady: false,
             hfloading: true,
             hfheight: null,
+            ifCpiyoyReady: false, // 保证获取数据后在渲染
+            ifCpimomReady: false,
+            isPieReady: false,
+            cpiyoy_data: [],
+            cpimom_data: [],
+            cciForecast_data: [],
+            otherForecast_data: [],
             hfdata1: [],
             hfdata2: [],
             hfdata3: []
@@ -183,6 +190,72 @@ export default {
     methods: {
         getData() {
             let HFDATA_URL = '/api/data/cpidata/'
+            let CPIYOY_URL = '/api/data/cpiyoy/'
+            let CPIMOM_URL = '/api/data/cpimom/'
+            let PIE_URL = '/api/data/cpicompare/'
+
+            axios
+                .get(CPIYOY_URL, {})
+                .then(res => {
+                    let data = res.data.data
+
+                    this.cpiyoy_data = data.map(item => {
+                        return {
+                            date: item.date,
+                            forecast: item.cpi_forecast,
+                            real_value: item.cpi_true,
+                            pv: item.cpi_tail
+                        }
+                    })
+                    this.ifCpiyoyReady = true
+                    // console.log(this.cpiyoy_data)
+                })
+                .catch(res => {
+                    console.log('cpi同比数据获取有误，错误原因为：' + res)
+                })
+
+            axios
+                .get(CPIMOM_URL, {})
+                .then(res => {
+                    let data = res.data.data
+
+                    this.cpimom_data = data.map(item => {
+                        return {
+                            date: item.date,
+                            forecast: item.cpi_forecast,
+                            real_value: item.cpi_true
+                        }
+                    })
+                    this.ifCpimomReady = true
+                    // console.log(this.cpimom_data)
+                })
+                .catch(res => {
+                    console.log('cpi环比数据获取有误，错误原因为：' + res)
+                })
+
+            axios
+                .get(PIE_URL, {})
+                .then(res => {
+                    let data = res.data.data
+
+                    this.cciForecast_data = data.map(item => {
+                        return {
+                            type: item.level,
+                            value: item.our_number
+                        }
+                    })
+                    this.otherForecast_data = data.map(item => {
+                        return {
+                            type: item.level,
+                            value: item.other_number
+                        }
+                    })
+                    this.isPieReady = true
+                    // console.log(this.cpiyoy_data)
+                })
+                .catch(res => {
+                    console.log('cpi同比数据获取有误，错误原因为：' + res)
+                })
 
             axios
                 .get(HFDATA_URL, {})
@@ -226,39 +299,6 @@ export default {
                     console.log('高频数据获取有误，错误原因为：' + res)
                 })
 
-            // this.hfdata1 = [
-            //     { year: '1991', value: 3 },
-            //     { year: '1992', value: 4 },
-            //     { year: '1993', value: 3.5 },
-            //     { year: '1994', value: 5 },
-            //     { year: '1995', value: 4.9 },
-            //     { year: '1996', value: 6 },
-            //     { year: '1997', value: 7 },
-            //     { year: '1998', value: 9 },
-            //     { year: '1999', value: 13 }
-            // ]
-            this.hfdata2 = [
-                { year: '1991', value: 3 },
-                { year: '1992', value: 4 },
-                { year: '1993', value: 3.5 },
-                { year: '1994', value: 5 },
-                { year: '1995', value: 4.9 },
-                { year: '1996', value: 6 },
-                { year: '1997', value: 7 },
-                { year: '1998', value: 9 },
-                { year: '1999', value: 13 }
-            ]
-            this.hfdata3 = [
-                { year: '1991', value: 3 },
-                { year: '1992', value: 4 },
-                { year: '1993', value: 3.5 },
-                { year: '1994', value: 5 },
-                { year: '1995', value: 4.9 },
-                { year: '1996', value: 6 },
-                { year: '1997', value: 7 },
-                { year: '1998', value: 9 },
-                { year: '1999', value: 13 }
-            ]
             this.hfheight = this.$refs.hfchart.offsetHeight
             // console.log('this.getdata')
             // console.log('1' + this.hfheight)
@@ -271,16 +311,6 @@ export default {
             // console.log(this.hfdata1)
         },
         initComponent() {
-            // let _this = this
-            // new Promise(function(resolve, reject) {
-            //     setTimeout(function() {
-            //         _this.getData()
-            //     }, 100)
-            // }).then(() => {
-            //     console.log('2' + this.hfheight)
-            //     _this.hfloading = false
-            //     _this.ishfReady = true
-            // })
             this.centerActiveTab = 'yoy'
             this.getData()
         },
