@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { Rose } from '@antv/g2plot'
+import { Donut } from '@antv/g2plot'
 // import { DataSet } from '@antv/data-set'
 
 export default {
@@ -17,33 +17,33 @@ export default {
     mounted() {
         this.initComponent()
     },
-    props: ['pieName'],
+    props: ['chartData', 'pieName'],
     data() {
         return {
             msg: '',
-            chart: '',
-            chartData: [
-                {
-                    type: '0~1%',
-                    value: 27
-                },
-                {
-                    type: '1%~2%',
-                    value: 25
-                },
-                {
-                    type: '2%~3%',
-                    value: 18
-                },
-                {
-                    type: '3%~5%',
-                    value: 15
-                },
-                {
-                    type: '>5%',
-                    value: 10
-                }
-            ]
+            chart: ''
+            // chartData: [
+            //     {
+            //         type: '0~1%',
+            //         value: 27
+            //     },
+            //     {
+            //         type: '1%~2%',
+            //         value: 25
+            //     },
+            //     {
+            //         type: '2%~3%',
+            //         value: 18
+            //     },
+            //     {
+            //         type: '3%~5%',
+            //         value: 15
+            //     },
+            //     {
+            //         type: '>5%',
+            //         value: 10
+            //     }
+            // ]
         }
     },
     // 方法集合
@@ -65,7 +65,7 @@ export default {
             let data = this.chartData
             let name = this.pieName
             // console.log(name)
-            const piePlot = new Rose(this.$refs.pieChart, {
+            const piePlot = new Donut(this.$refs.pieChart, {
                 forceFit: true,
                 title: {
                     visible: true,
@@ -73,18 +73,24 @@ export default {
                 },
                 description: {
                     visible: true,
-                    text: '单位：%'
+                    text: '2016年至今 （单位：次）'
                 },
                 radius: 1,
+                padding: 'auto',
                 data,
-                radiusField: 'value',
-                categoryField: 'type',
-                colorField: 'type',
-                label: {
-                    visible: true,
-                    type: 'outer',
-                    content: text => text.value
-                }
+                angleField: 'value',
+                colorField: 'type'
+                // statistic: {
+                //     visible: false
+                // }
+
+                // radiusField: 'value',
+                // categoryField: 'type',
+                // label: {
+                //     visible: true,
+                //     type: 'outer',
+                //     content: text => text.value
+                // }
             })
 
             piePlot.render()

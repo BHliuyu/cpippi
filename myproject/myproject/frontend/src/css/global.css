@@ -9,6 +9,7 @@ html {
     position: relative;
     margin: 0 auto;
     min-width: 768px;
+    min-height: 900px;
     font-size: 62.5%;
 }
 
